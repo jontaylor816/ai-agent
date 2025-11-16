@@ -3,6 +3,7 @@ import os
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
+from prompts import system_prompt
 
 
 def main():
@@ -15,7 +16,7 @@ def main():
     if not args:
         print("AI Code Assistant")
         print('\nUsage: python main.py "your prompt here"')
-        print('Example: python main.py "How do I build a calculator app?"')
+        print('Example: python main.py "How do I fix the calculator?"')
         sys.exit(1)
     
     if "--verbose" in args:
@@ -38,6 +39,7 @@ def generate_content(client, messages, verbose):
     response = client.models.generate_content(
         model="gemini-2.0-flash-001",
         contents=messages,
+        config=types.GenerateContentConfig(system_instruction=system_prompt),
     )
     if verbose:
         print("User prompt:", messages[0].parts[0].text)
